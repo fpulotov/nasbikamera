@@ -38,10 +38,46 @@
     margin-bottom: 8px;
 }
 
-.lightbox-content img, .lightbox-content video {
+/* Адаптивность для мобильных */
+.lightbox-content {
+    width: 100%;
     max-width: 100%;
-    max-height: 80vh;
+    padding: 10px; /* Уменьшаем отступы на смартфонах */
+    background: transparent; /* Убираем фон, чтобы не мешал контенту */
+}
+
+.lightbox-content img, 
+.lightbox-content video {
+    max-width: 100%;
+    max-height: 75vh; /* Оставляем место для текста и кнопки закрытия */
+    height: auto;
     border-radius: 8px;
+    object-fit: contain;
+    transition: transform 0.3s ease; /* Плавный зум */
+    cursor: zoom-in;
+}
+
+/* Класс для увеличенного состояния */
+.lightbox-content img.zoomed {
+    transform: scale(1.5); /* Уровень зума */
+    cursor: zoom-out;
+}
+
+/* На мобильных экранах (меньше 768px) */
+@media (max-width: 767px) {
+    .lightbox-close {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 колонки на телефоне */
+        gap: 8px;
+    }
+
+    .lightbox-content img.zoomed {
+        transform: scale(2); /* На телефоне можно зумить сильнее */
+    }
 }
 
         :root {
@@ -952,37 +988,30 @@
         <div class="portfolio-grid">
             <div class="portfolio-item" onclick="openLightbox(this, 'image', '1.jpg')">
                 <img src="1.jpg" alt="Работа 1" class="portfolio-img-file">
-                <div class="portfolio-overlay"><div class="portfolio-label">Фото: Офис</div></div>
             </div>
-            <div class="portfolio-item" onclick="openLightbox(this, 'image', '2.jpg')">
-                <img src="2.jpg" alt="Работа 2" class="portfolio-img-file">
-                <div class="portfolio-overlay"><div class="portfolio-label">Фото: Дом</div></div>
-            </div>
-            <div class="portfolio-item" onclick="openLightbox(this, 'image', '3.jpg')">
-                <img src="3.jpg" alt="Работа 3" class="portfolio-img-file">
-                <div class="portfolio-overlay"><div class="portfolio-label">Фото: Магазин</div></div>
-            </div>
-
             <div class="portfolio-item" onclick="openLightbox(this, 'video', '1.mp4')">
                 <div class="video-preview-placeholder">
                     <i class="fas fa-play-circle"></i>
                     <span>Видео 1</span>
                 </div>
-                <div class="portfolio-overlay"><div class="portfolio-label">Видео: Обзор 1</div></div>
             </div>
-            <div class="portfolio-item" onclick="openLightbox(this, 'video', '2.mp4')">
+            <div class="portfolio-item" onclick="openLightbox(this, 'image', '2.jpg')">
+                <img src="2.jpg" alt="Работа 2" class="portfolio-img-file">
+            </div>
+             <div class="portfolio-item" onclick="openLightbox(this, 'video', '2.mp4')">
                 <div class="video-preview-placeholder">
                     <i class="fas fa-play-circle"></i>
                     <span>Видео 2</span>
                 </div>
-                <div class="portfolio-overlay"><div class="portfolio-label">Видео: Обзор 2</div></div>
+            </div>
+            <div class="portfolio-item" onclick="openLightbox(this, 'image', '3.jpg')">
+                <img src="3.jpg" alt="Работа 3" class="portfolio-img-file">
             </div>
             <div class="portfolio-item" onclick="openLightbox(this, 'video', '3.mp4')">
                 <div class="video-preview-placeholder">
                     <i class="fas fa-play-circle"></i>
                     <span>Видео 3</span>
                 </div>
-                <div class="portfolio-overlay"><div class="portfolio-label">Видео: Обзор 3</div></div>
             </div>
         </div>
     </div>
@@ -1188,22 +1217,28 @@
         // ============================================
         function openLightbox(item, type, source) {
     const container = document.getElementById('lightbox-container');
-    const label = item.querySelector('.portfolio-label').textContent;
     const textElement = document.getElementById('lightbox-text');
     
-    // Очищаем контейнер перед вставкой
+    // Пытаемся найти текст в overlay, если его нет — ставим пустую строку
+    const label = item.querySelector('.portfolio-label') ? item.querySelector('.portfolio-label').textContent : "";
+    
     container.innerHTML = '';
     textElement.textContent = label;
 
     if (type === 'image') {
         const img = document.createElement('img');
         img.src = source;
+        // Добавляем функцию зума по клику на саму картинку
+        img.onclick = function() {
+            this.classList.toggle('zoomed');
+        };
         container.appendChild(img);
     } else if (type === 'video') {
         const video = document.createElement('video');
         video.src = source;
         video.controls = true;
         video.autoplay = true;
+        video.style.cursor = 'default'; // Для видео зум обычно не нужен
         container.appendChild(video);
     }
 
@@ -1213,7 +1248,7 @@
 
 function closeLightbox() {
     const container = document.getElementById('lightbox-container');
-    container.innerHTML = ''; // Останавливаем видео при закрытии
+    container.innerHTML = ''; 
     document.getElementById('lightbox').classList.remove('active');
     document.body.style.overflow = '';
 }
