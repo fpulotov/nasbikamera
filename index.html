@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nasbi Kamera | Установка видеонаблюдения в Душанбе</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .portfolio-img-file {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Чтобы фото заполняло квадрат */
+    transition: transform 0.3s;
+}
+
+.video-preview-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.video-preview-placeholder i {
+    font-size: 40px;
+    color: var(--blue);
+    margin-bottom: 8px;
+}
+
+.lightbox-content img, .lightbox-content video {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 8px;
+}
+
+        :root {
+            --white: #ffffff;
+            --black: #1a1a2e;
+            --blue: #0056b3;
+            --blue-dark: #004494;
+            --blue-light: #e8f4fd;
+            --green: #25d366;
+            --green-dark: #1da851;
+            --gray: #6b7280;
+            --gray-light: #f3f4f6;
+            --gray-border: #e5e7eb;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--white);
+            color: var(--black);
+            font-size: 16px;
+            line-height: 1.6;
+            padding-bottom: 80px;
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        /* ===== STICKY HEADER ===== */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--gray-border);
+            padding: 12px 16px;
+        }
+        
+        .header-inner {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--black);
+        }
+        
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(0, 86, 179, 0.3);
+        }
+        
+        .logo-text {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-text span {
+            color: var(--blue);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-call {
+            width: 44px;
+            height: 44px;
+            background: var(--blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 18px;
+            transition: transform 0.2s, background 0.2s;
+        }
+        
+        .header-call:active {
+            transform: scale(0.95);
+            background: var(--blue-dark);
+        }
+        
+        .lang-toggle {
+            display: flex;
+            background: var(--gray-light);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .lang-btn {
+            padding: 8px 12px;
+            background: transparent;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--gray);
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .lang-btn.active {
+            background: var(--blue);
+            color: var(--white);
+        }
+        
+        /* ===== HERO SECTION ===== */
+        .hero {
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            overflow: hidden;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(135deg, rgba(0, 86, 179, 0.9), rgba(0, 68, 148, 0.85)),
+                url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800') center/cover;
+            z-index: 0;
+        }
+        
+        .hero-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 40%);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 500px;
+            color: var(--white);
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 10px 18px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .hero-badge i {
+            color: #4ade80;
+        }
+        
+        .hero-title {
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+        }
+        
+        .hero-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+        
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--white);
+            color: var(--blue);
+            padding: 18px 36px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 700;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .hero-cta:active {
+            transform: scale(0.98);
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+        
+        /* ===== SERVICES / PRICES ===== */
+        .services {
+            padding: 50px 20px;
+            background: var(--white);
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--black);
+            margin-bottom: 10px;
+        }
+        
+        .section-subtitle {
+            color: var(--gray);
+            font-size: 16px;
+        }
+        
+        .price-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .price-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--gray-light);
+            padding: 20px;
+            border-radius: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .price-card:active {
+            transform: scale(0.99);
+        }
+        
+        .price-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .price-info {
+            flex: 1;
+        }
+        
+        .price-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 4px;
+        }
+        
+        .price-desc {
+            font-size: 13px;
+            color: var(--gray);
+        }
+        
+        .price-value {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--blue);
+            white-space: nowrap;
+        }
+        
+        .price-value span {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray);
+        }
+        
+        /* ===== FEATURES ===== */
+        .features {
+            padding: 50px 20px;
+            background: var(--blue-light);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .feature-card {
+            background: var(--white);
+            padding: 24px 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 24px;
+            margin: 0 auto 14px;
+        }
+        
+        .feature-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 6px;
+        }
+        
+        .feature-text {
+            font-size: 13px;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+        
+        /* ===== GEOGRAPHY ===== */
+        .geography {
+            padding: 50px 20px;
+            background: var(--white);
+        }
+        
+        .geo-card {
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            border-radius: 24px;
+            padding: 30px 24px;
+            color: var(--white);
+            text-align: center;
+        }
+        
+        .geo-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .geo-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        
+        .geo-text {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        
+        .geo-cities {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .geo-city {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        /* ===== PORTFOLIO ===== */
+        .portfolio {
+            padding: 50px 20px;
+            background: var(--gray-light);
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .portfolio-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .portfolio-img {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e0e0e0, #f5f5f5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+            transition: transform 0.3s;
+        }
+        
+        .portfolio-item:active .portfolio-img {
+            transform: scale(1.05);
+        }
+        
+        .portfolio-img i {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: var(--blue);
+        }
+        
+        .portfolio-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 40px 14px 14px;
+        }
+        
+        .portfolio-label {
+            color: var(--white);
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        /* ===== LIGHTBOX ===== */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .lightbox.active {
+            display: flex;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 80%;
+            background: var(--gray-light);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: var(--gray);
+            text-align: center;
+        }
+        
+        .lightbox-content i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: var(--blue);
+        }
+        
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 40px 20px;
+            background: var(--black);
+            color: var(--white);
+            text-align: center;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .footer-logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        
+        .footer-logo-text {
+            font-size: 22px;
+            font-weight: 800;
+        }
+        
+        .footer-contacts {
+            margin-bottom: 24px;
+        }
+        
+        .footer-phone {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .footer-address {
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .social-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 22px;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        
+        .social-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .social-btn.whatsapp { background: var(--green); }
+        .social-btn.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        
+        .footer-copy {
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+        }
+        
+        /* ===== STICKY BOTTOM BAR ===== */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: var(--white);
+            display: flex;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            padding: 10px;
+            gap: 10px;
+        }
+        
+        .bottom-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            font-family: inherit;
+        }
+        
+        .bottom-btn:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+        
+        .bottom-btn i {
+            font-size: 20px;
+        }
+        
+        .btn-whatsapp {
+            flex: 0 0 70%;
+            background: var(--blue);
+            color: var(--white);
+        }
+        
+        .btn-call {
+            flex: 0 0 30%;
+            background: var(--green);
+            color: var(--white);
+        }
+        
+        /* ===== SAFE AREA ===== */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            body {
+                padding-bottom: calc(80px + env(safe-area-inset-bottom));
+            }
+            
+            .bottom-bar {
+                padding-bottom: calc(10px + env(safe-area-inset-bottom));
+                height: calc(72px + env(safe-area-inset-bottom));
+            }
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (min-width: 768px) {
+            .hero-title {
+                font-size: 42px;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .bottom-bar {
+                max-width: 500px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 18px 18px 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="logo-text">Nasbi<span>Kamera</span></div>
+            </a>
+            <div class="header-right">
+                <div class="lang-toggle">
+                    <button class="lang-btn active" data-lang="ru">RU</button>
+                    <button class="lang-btn" data-lang="tj">TJ</button>
+                </div>
+                <a href="tel:+992933676262" class="header-call">
+                    <i class="fas fa-phone-alt"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-pattern"></div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-check-circle"></i>
+                    <span data-i18n="hero.badge">Надёжное оборудование</span>
+                </div>
+                <h1 class="hero-title" data-i18n="hero.title">Установка камер видеонаблюдения в Душанбе</h1>
+                <p class="hero-subtitle" data-i18n="hero.subtitle">Ваша безопасность — под нашим контролем 🛡️</p>
+                <a href="https://wa.me/992933676262?text=Здравствуйте!%20Хочу%20заказать%20установку%20камер" class="hero-cta" id="hero-cta">
+                    <i class="fab fa-whatsapp"></i>
+                    <span data-i18n="hero.cta">Рассчитать стоимость</span>
+                </a>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">3+</div>
+                        <div class="stat-label" data-i18n="stat.years">лет опыта</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">500+</div>
+                        <div class="stat-label" data-i18n="stat.clients">клиентов</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label" data-i18n="stat.support">поддержка</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services & Prices -->
+        <section class="services" id="services">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title" data-i18n="services.title">Услуги и цены</h2>
+                    <p class="section-subtitle" data-i18n="services.subtitle">Прозрачные цены без скрытых платежей</p>
+                </div>
+                <div class="price-list">
+                    <div class="price-card">
+                        <div class="price-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-name" data-i18n="price.1.name">IP / Аналоговые камеры</div>
+                            <div class="price-desc" data-i18n="price.1.desc">Установка и настройка</div>
+                        </div>
+                        <div class="price-value"><span data-i18n="from">от</span> 250 с.</div>
+                    </div>
+                    <div class="price-card">
+                        <div class="price-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-name" data-i18n="price.2.name">Для дома</div>
+                            <div class="price-desc" data-i18n="price.2.desc">Комплект под ключ</div>
+                        </div>
+                        <div class="price-value"><span data-i18n="from">от</span> 600 с.</div>
+                    </div>
+                    <div class="price-card">
+                        <div class="price-icon">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-name" data-i18n="price.3.name">Для магазина</div>
+                            <div class="price-desc" data-i18n="price.3.desc">4-8 камер + регистратор</div>
+                        </div>
+                        <div class="price-value"><span data-i18n="from">от</span> 800 с.</div>
+                    </div>
+                    <div class="price-card">
+                        <div class="price-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-name" data-i18n="price.4.name">Для офиса</div>
+                            <div class="price-desc" data-i18n="price.4.desc">Полная система безопасности</div>
+                        </div>
+                        <div class="price-value"><span data-i18n="from">от</span> 900 с.</div>
+                    </div>
+                    <div class="price-card">
+                        <div class="price-icon">
+                            <i class="fas fa-warehouse"></i>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-name" data-i18n="price.5.name">Для склада</div>
+                            <div class="price-desc" data-i18n="price.5.desc">Периметр + внутри</div>
+                        </div>
+                        <div class="price-value"><span data-i18n="from">от</span> 1200 с.</div>
+                    </div>
+                    <div class="price-card">
+                        <div class="price-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-name" data-i18n="price.6.name">Ремонт / Настройка</div>
+                            <div class="price-desc" data-i18n="price.6.desc">Диагностика и обслуживание</div>
+                        </div>
+                        <div class="price-value"><span data-i18n="from">от</span> 150 с.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title" data-i18n="features.title">Почему выбирают нас</h2>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="feature-title" data-i18n="feature.1.title">3 года опыта</div>
+                        <div class="feature-text" data-i18n="feature.1.text">Проверенные решения</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="feature-title" data-i18n="feature.2.title">Гарантия</div>
+                        <div class="feature-text" data-i18n="feature.2.text">На все работы</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <div class="feature-title" data-i18n="feature.3.title">Оборудование</div>
+                        <div class="feature-text" data-i18n="feature.3.text">Надёжные бренды</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div class="feature-title" data-i18n="feature.4.title">Поддержка</div>
+                        <div class="feature-text" data-i18n="feature.4.text">Всегда на связи</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Geography -->
+        <section class="geography">
+            <div class="container">
+                <div class="geo-card">
+                    <h2 class="geo-title" data-i18n="geo.title">Работаем по всему региону</h2>
+                    <p class="geo-text" data-i18n="geo.text">Выезжаем на объект в любой район. Бесплатная консультация и замер.</p>
+                    <div class="geo-cities">
+                        <span class="geo-city" data-i18n="geo.city.1">Душанбе</span>
+                        <span class="geo-city" data-i18n="geo.city.2">Вахдат</span>
+                        <span class="geo-city" data-i18n="geo.city.3">Гиссар</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio -->
+        <section class="portfolio" id="portfolio">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title" data-i18n="portfolio.title">Наши работы</h2>
+            <p class="section-subtitle" data-i18n="portfolio.subtitle">Примеры установленных систем</p>
+        </div>
+        
+        <div class="portfolio-grid">
+            <div class="portfolio-item" onclick="openLightbox(this, 'image', '1.jpg')">
+                <img src="1.jpg" alt="Работа 1" class="portfolio-img-file">
+                <div class="portfolio-overlay"><div class="portfolio-label">Фото: Офис</div></div>
+            </div>
+            <div class="portfolio-item" onclick="openLightbox(this, 'image', '2.jpg')">
+                <img src="2.jpg" alt="Работа 2" class="portfolio-img-file">
+                <div class="portfolio-overlay"><div class="portfolio-label">Фото: Дом</div></div>
+            </div>
+            <div class="portfolio-item" onclick="openLightbox(this, 'image', '3.jpg')">
+                <img src="3.jpg" alt="Работа 3" class="portfolio-img-file">
+                <div class="portfolio-overlay"><div class="portfolio-label">Фото: Магазин</div></div>
+            </div>
+
+            <div class="portfolio-item" onclick="openLightbox(this, 'video', '1.mp4')">
+                <div class="video-preview-placeholder">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Видео 1</span>
+                </div>
+                <div class="portfolio-overlay"><div class="portfolio-label">Видео: Обзор 1</div></div>
+            </div>
+            <div class="portfolio-item" onclick="openLightbox(this, 'video', '2.mp4')">
+                <div class="video-preview-placeholder">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Видео 2</span>
+                </div>
+                <div class="portfolio-overlay"><div class="portfolio-label">Видео: Обзор 2</div></div>
+            </div>
+            <div class="portfolio-item" onclick="openLightbox(this, 'video', '3.mp4')">
+                <div class="video-preview-placeholder">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Видео 3</span>
+                </div>
+                <div class="portfolio-overlay"><div class="portfolio-label">Видео: Обзор 3</div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="lightbox" class="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <div class="lightbox-content" id="lightbox-container">
+        </div>
+    <div id="lightbox-text" style="color: white; margin-top: 15px; font-weight: bold;"></div>
+</div>
+
+        <!-- Footer -->
+        <footer class="footer" id="contacts">
+            <div class="container">
+                <div class="footer-logo">
+                    <div class="footer-logo-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="footer-logo-text">NasbiKamera</div>
+                </div>
+                <div class="footer-contacts">
+                    <a href="tel:+992933676262" class="footer-phone">
+                        <i class="fas fa-phone-alt"></i>
+                        +992 93 367 62 62
+                    </a>
+                    <p class="footer-address" data-i18n="footer.address">Душанбе, Таджикистан<br>Работаем: 08:00 — 20:00</p>
+                </div>
+                <div class="footer-social">
+                    <a href="https://wa.me/992933676262" class="social-btn whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://www.instagram.com/nasbi_kamera?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
+                       class="social-btn instagram" 
+                       target="_blank" 
+                       rel="noopener noreferrer">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+                <p class="footer-copy">© 2026 NasbiKamera. <span data-i18n="footer.copy">Все права защищены.</span></p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="lightbox-content">
+            <i class="fas fa-camera"></i>
+            <p id="lightbox-text">Фото работы</p>
+        </div>
+    </div>
+
+    <!-- Sticky Bottom Bar -->
+    <div class="bottom-bar">
+        <a href="https://wa.me/992933676262?text=Здравствуйте!%20Хочу%20заказать%20установку%20камер" class="bottom-btn btn-whatsapp" id="wa-btn">
+            <i class="fab fa-whatsapp"></i>
+            <span data-i18n="btn.whatsapp">Заказать в WhatsApp</span>
+        </a>
+        <a href="tel:+992933676262" class="bottom-btn btn-call">
+            <i class="fas fa-phone-alt"></i>
+        </a>
+    </div>
+
+    <script>
+        // ============================================
+        // TRANSLATIONS
+        // ============================================
+        const translations = {
+            ru: {
+                'hero.badge': 'Надёжное оборудование',
+                'hero.title': 'Установка камер видеонаблюдения в Душанбе',
+                'hero.subtitle': 'Ваша безопасность — под нашим контролем 🛡️',
+                'hero.cta': 'Рассчитать стоимость',
+                'stat.years': 'лет опыта',
+                'stat.clients': 'клиентов',
+                'stat.support': 'поддержка',
+                'services.title': 'Услуги и цены',
+                'services.subtitle': 'Прозрачные цены без скрытых платежей',
+                'from': 'от',
+                'price.1.name': 'IP / Аналоговые камеры',
+                'price.1.desc': 'Установка и настройка',
+                'price.2.name': 'Для дома',
+                'price.2.desc': 'Комплект под ключ',
+                'price.3.name': 'Для магазина',
+                'price.3.desc': '4-8 камер + регистратор',
+                'price.4.name': 'Для офиса',
+                'price.4.desc': 'Полная система безопасности',
+                'price.5.name': 'Для склада',
+                'price.5.desc': 'Периметр + внутри',
+                'price.6.name': 'Ремонт / Настройка',
+                'price.6.desc': 'Диагностика и обслуживание',
+                'features.title': 'Почему выбирают нас',
+                'feature.1.title': '3 года опыта',
+                'feature.1.text': 'Проверенные решения',
+                'feature.2.title': 'Гарантия',
+                'feature.2.text': 'На все работы',
+                'feature.3.title': 'Оборудование',
+                'feature.3.text': 'Надёжные бренды',
+                'feature.4.title': 'Поддержка',
+                'feature.4.text': 'Всегда на связи',
+                'geo.title': 'Работаем по всему региону',
+                'geo.text': 'Выезжаем на объект в любой район. Бесплатная консультация и замер.',
+                'geo.city.1': 'Душанбе',
+                'geo.city.2': 'Вахдат',
+                'geo.city.3': 'Гиссар',
+                'portfolio.title': 'Наши работы',
+                'portfolio.subtitle': 'Примеры установленных систем',
+                'portfolio.1': 'Установка в офисе',
+                'portfolio.2': 'Камеры для дома',
+                'portfolio.3': 'Система для магазина',
+                'portfolio.4': 'Периметр склада',
+                'footer.address': 'Душанбе, Таджикистан\nРаботаем: 08:00 — 20:00',
+                'footer.copy': 'Все права защищены.',
+                'btn.whatsapp': 'Заказать в WhatsApp'
+            },
+            tj: {
+                'hero.badge': 'Таҷҳизоти боэътимод',
+                'hero.title': 'Насби камераҳои видеоназорат дар Душанбе',
+                'hero.subtitle': 'Амнияти шумо — зери назорати мо 🛡️',
+                'hero.cta': 'Ҳисоби арзиш',
+                'stat.years': 'соли таҷриба',
+                'stat.clients': 'мизоҷон',
+                'stat.support': 'дастгирӣ',
+                'services.title': 'Хизматҳо ва нархҳо',
+                'services.subtitle': 'Нархҳои шаффоф бе пардохтҳои пинҳонӣ',
+                'from': 'аз',
+                'price.1.name': 'IP / Камераҳои аналогӣ',
+                'price.1.desc': 'Насб ва танзим',
+                'price.2.name': 'Барои хона',
+                'price.2.desc': 'Маҷмӯаи комил',
+                'price.3.name': 'Барои мағоза',
+                'price.3.desc': '4-8 камера + сабткунанда',
+                'price.4.name': 'Барои офис',
+                'price.4.desc': 'Системаи пурраи амният',
+                'price.5.name': 'Барои анбор',
+                'price.5.desc': 'Периметр + дохил',
+                'price.6.name': 'Таъмир / Танзим',
+                'price.6.desc': 'Ташхис ва хизматрасонӣ',
+                'features.title': 'Чаро моро интихоб мекунанд',
+                'feature.1.title': '3 соли таҷриба',
+                'feature.1.text': 'Ҳалҳои санҷидашуда',
+                'feature.2.title': 'Кафолат',
+                'feature.2.text': 'Барои ҳама корҳо',
+                'feature.3.title': 'Таҷҳизот',
+                'feature.3.text': 'Брендҳои боэътимод',
+                'feature.4.title': 'Дастгирӣ',
+                'feature.4.text': 'Ҳамеша дар алоқа',
+                'geo.title': 'Дар тамоми минтақа кор мекунем',
+                'geo.text': 'Ба ҳар як ноҳия мебароем. Машварат ва ченкунии ройгон.',
+                'geo.city.1': 'Душанбе',
+                'geo.city.2': 'Ваҳдат',
+                'geo.city.3': 'Ҳисор',
+                'portfolio.title': 'Корҳои мо',
+                'portfolio.subtitle': 'Намунаҳои системаҳои насбшуда',
+                'portfolio.1': 'Насб дар офис',
+                'portfolio.2': 'Камераҳо барои хона',
+                'portfolio.3': 'Система барои мағоза',
+                'portfolio.4': 'Периметри анбор',
+                'footer.address': 'Душанбе, Тоҷикистон\nСоати корӣ: 08:00 — 20:00',
+                'footer.copy': 'Ҳамаи ҳуқуқҳо ҳифз шудаанд.',
+                'btn.whatsapp': 'Фармоиш дар WhatsApp'
+            }
+        };
+
+        // ============================================
+        // LANGUAGE SWITCHER
+        // ============================================
+        let currentLang = localStorage.getItem('lang') || 'ru';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            
+            // Update WhatsApp links
+            const waText = lang === 'ru' 
+                ? 'Здравствуйте! Хочу заказать установку камер'
+                : 'Салом! Мехоҳам камераҳо насб кунам';
+            const waUrl = `https://wa.me/992933676262?text=${encodeURIComponent(waText)}`;
+            document.getElementById('hero-cta').href = waUrl;
+            document.getElementById('wa-btn').href = waUrl;
+        }
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+        });
+
+        // ============================================
+        // LIGHTBOX
+        // ============================================
+        function openLightbox(item, type, source) {
+    const container = document.getElementById('lightbox-container');
+    const label = item.querySelector('.portfolio-label').textContent;
+    const textElement = document.getElementById('lightbox-text');
+    
+    // Очищаем контейнер перед вставкой
+    container.innerHTML = '';
+    textElement.textContent = label;
+
+    if (type === 'image') {
+        const img = document.createElement('img');
+        img.src = source;
+        container.appendChild(img);
+    } else if (type === 'video') {
+        const video = document.createElement('video');
+        video.src = source;
+        video.controls = true;
+        video.autoplay = true;
+        container.appendChild(video);
+    }
+
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    const container = document.getElementById('lightbox-container');
+    container.innerHTML = ''; // Останавливаем видео при закрытии
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Закрытие при клике на темную область
+document.getElementById('lightbox').addEventListener('click', (e) => {
+    if (e.target.id === 'lightbox') closeLightbox();
+});
+
+        // ============================================
+        // INIT
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            setLanguage(currentLang);
+        });
+    </script>
+
+</body>
+</html>
