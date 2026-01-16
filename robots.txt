@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://fpulotov.github.io/nasbikamera/sitemap.xml
